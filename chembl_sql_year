@@ -1,0 +1,14 @@
+SELECT target_dictionary.chembl_id, target_dictionary.organism, target_dictionary.pref_name, molecule_dictionary.chembl_id, activities.pchembl_value, compound_structures.canonical_smiles, docs.year
+FROM compound_structures INNER JOIN molecule_dictionary
+ON compound_structures.molregno = molecule_dictionary.molregno
+INNER Join activities
+      ON molecule_dictionary.molregno = activities.molregno
+INNER Join assays
+      ON activities.assay_id = assays.assay_id
+INNER Join docs
+      ON assays.doc_id = docs.doc_id
+INNER Join target_dictionary
+      ON assays.tid = target_dictionary.tid
+WHERE activities.pchembl_value > "5" and target_dictionary.organism in ("Homo sapiens") and target_dictionary.target_type in ("SINGLE PROTEIN")
+order by docs.year
+-- order by target_dictionary.tid
